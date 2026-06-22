@@ -1,17 +1,25 @@
 "use client";
 import React from "react";
 import { submitReview } from "@/lib/actions/review";
+import { toast } from "react-toastify";
+import { getUserSession } from "@/lib/core/session";
+//import { redirect } from "next/navigation";
 
-const ReviewForm = (propertyId, property, user) => {
+const ReviewForm = ({ propertyId, property }) => {
   const handleReview = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
     const data = Object.fromEntries(formData.entries());
+
+    const user = await getUserSession();
 
     const payload = {
       ...data,
       reviewerName: user?.name,
       reviewerEmail: user?.email,
+      reviewerImg: user?.image,
       propertyId: propertyId,
     };
     //console.log("post data: ", payload);
@@ -19,10 +27,10 @@ const ReviewForm = (propertyId, property, user) => {
     const res = await submitReview(payload);
     if (res?.insertedId) {
       toast.success("Review posted successfully!");
-      e.target.reset();
-      redirect("/");
+      formElement.reset(); // Use the stored reference to reset the form safely
     }
   };
+
   return (
     <div className="border-t border-neutral-800 pt-6 space-y-4">
       <form
@@ -36,6 +44,7 @@ const ReviewForm = (propertyId, property, user) => {
           </label>
           <div className="relative max-w-[120px]">
             <select
+              name="rating"
               className="w-full bg-[#111115] border border-neutral-800 rounded-lg p-2.5 text-sm text-neutral-200 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none cursor-pointer"
               defaultValue="5"
             >
@@ -60,6 +69,7 @@ const ReviewForm = (propertyId, property, user) => {
             Write Review
           </label>
           <textarea
+            name="review"
             rows={4}
             placeholder="Share your experience staying at this place..."
             className="w-full bg-[#111115] border border-neutral-800 rounded-lg p-3 text-sm text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-indigo-500/50 transition-colors"

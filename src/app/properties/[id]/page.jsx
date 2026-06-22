@@ -140,11 +140,7 @@ export default async function PropertyDetailsPage({ params }) {
                 Reviews & Ratings
               </h3>
 
-              <ReviewForm
-                propertyId={property?._id}
-                property={property}
-                user={user}
-              />
+              <ReviewForm propertyId={property?._id} />
             </div>
           </div>
 
