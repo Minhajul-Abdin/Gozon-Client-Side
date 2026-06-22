@@ -1,5 +1,9 @@
 import { serverFetch } from "@/lib/core/server";
 
+export const getFeaturedProperty = async () => {
+  return serverFetch(`/api/featured/properties`);
+};
+
 export const getProperty = async () => {
   return serverFetch(`/api/properties`);
 };

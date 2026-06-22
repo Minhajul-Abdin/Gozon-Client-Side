@@ -1,5 +1,7 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ListBox, Select } from "@heroui/react";
 import {
@@ -30,6 +32,11 @@ export default function SignupPage() {
   const [role, setRole] = useState("tenant");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+
+  //search params
+  const router = useRouter();
+  const searchparams = useSearchParams();
+  const redirectTo = searchparams.get("redirect") || "/";
 
   // UI States
   const [isVisible, setIsVisible] = useState(false);
@@ -90,7 +97,6 @@ export default function SignupPage() {
         name,
         role,
         image: imageUrl,
-        callbackURL: "/",
       });
 
       if (authError) {
@@ -102,6 +108,7 @@ export default function SignupPage() {
         setPassword("");
         setImageFile(null);
         setImagePreview("");
+        router.push(redirectTo);
       }
     } catch (err) {
       setError(err.message || "An unexpected network error occurred.");
@@ -312,7 +319,7 @@ export default function SignupPage() {
             <div className="text-center mt-6 pt-5 border-t border-zinc-800/60 w-full text-xs text-zinc-500 font-medium">
               Already have an account?{" "}
               <Link
-                href="/auth/signin"
+                href={`/auth/signin/redirect=${redirectTo}`}
                 className="text-indigo-400 font-semibold hover:text-indigo-300 transition-colors ml-0.5 text-xs"
               >
                 Sign in instead

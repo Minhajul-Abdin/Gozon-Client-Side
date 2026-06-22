@@ -1,11 +1,15 @@
-// app/properties/[id]/page.js
+"use server";
 import React from "react";
 import { getPropertyById } from "@/lib/api/property";
+import { getUserSession } from "@/lib/core/session";
+import { redirect } from "next/navigation";
 import BookingButton from "@/components/property/bookingBtn";
 
 export default async function PropertyDetailsPage({ params }) {
   const { id } = await params;
   const property = await getPropertyById(id);
+
+  const user = await getUserSession();
 
   if (!property) {
     return (
@@ -13,6 +17,20 @@ export default async function PropertyDetailsPage({ params }) {
         <p className="text-neutral-400">Property not found.</p>
       </div>
     );
+  }
+
+  if (!user) {
+    redirect(`/auth/signin?redirect=/properties/${id}`);
+  }
+
+  {
+    /*if (user?.role !== "tenant") {
+    return (
+      <div className="w-full min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-6 text-3xl">
+        Sorry Only Tenants Can Book. Sign In With an Tenant Account
+      </div>
+    );
+  }*/
   }
 
   // Fallback if selectedAmenities is missing or empty
@@ -30,12 +48,12 @@ export default async function PropertyDetailsPage({ params }) {
         {/* Main Image Showcase */}
         <div className="relative h-[400px] w-full overflow-hidden rounded-2xl border border-neutral-800 bg-[#111115]">
           <img
-            src={property.images || "https://via.placeholder.com/1200x800"}
-            alt={property.propertyTitle}
+            src={property?.images || "https://via.placeholder.com/1200x800"}
+            alt={property?.propertyTitle}
             className="w-full h-full object-cover"
           />
           <div className="absolute top-4 right-4 bg-emerald-500/90 text-white text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-wider backdrop-blur-sm">
-            {property.status}
+            {property?.status}
           </div>
         </div>
 
@@ -45,12 +63,12 @@ export default async function PropertyDetailsPage({ params }) {
           <div className="lg:col-span-2 space-y-6">
             <div>
               <span className="text-xs uppercase font-semibold text-neutral-400 tracking-wider">
-                {property.propertyType} • For Rent ({property.rentType})
+                {property?.propertyType} • For Rent ({property?.rentType})
               </span>
               <h1 className="text-3xl font-bold tracking-tight text-neutral-100 mt-1">
-                {property.propertyTitle}
+                {property?.propertyTitle}
               </h1>
-              <p className="text-neutral-400 mt-1">{property.location}</p>
+              <p className="text-neutral-400 mt-1">{property?.location}</p>
             </div>
 
             {/* Core Specs Grid */}
@@ -58,19 +76,19 @@ export default async function PropertyDetailsPage({ params }) {
               <div>
                 <p className="text-xs text-neutral-500">Bedrooms</p>
                 <p className="text-lg font-semibold text-neutral-200">
-                  {property.bedrooms}
+                  {property?.bedrooms}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-neutral-500">Bathrooms</p>
                 <p className="text-lg font-semibold text-neutral-200">
-                  {property.bathrooms}
+                  {property?.bathrooms}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-neutral-500">Size</p>
                 <p className="text-lg font-semibold text-neutral-200">
-                  {property.propertySize} sqft
+                  {property?.propertySize} sqft
                 </p>
               </div>
             </div>
@@ -81,7 +99,7 @@ export default async function PropertyDetailsPage({ params }) {
                 About this place
               </h3>
               <p className="text-neutral-400 leading-relaxed text-sm">
-                {property.description}
+                {property?.description}
               </p>
             </div>
 
@@ -103,16 +121,69 @@ export default async function PropertyDetailsPage({ params }) {
                 </div>
               </div>
 
-              {property.extraFeatures && (
+              {property?.extraFeatures && (
                 <div>
                   <h4 className="text-sm font-semibold text-neutral-300 mb-2">
                     Extra Features
                   </h4>
                   <span className="text-xs bg-indigo-950/40 text-indigo-300 border border-indigo-900/50 px-2.5 py-1 rounded-md inline-block">
-                    {property.extraFeatures}
+                    {property?.extraFeatures}
                   </span>
                 </div>
               )}
+            </div>
+
+            {/* Review Section */}
+            <div className="border-t border-neutral-800 pt-6 space-y-4">
+              <h3 className="text-lg font-semibold text-neutral-200">
+                Reviews & Ratings
+              </h3>
+
+              <form className="space-y-4 p-5 border border-neutral-800 rounded-xl bg-[#111115]/30">
+                {/* Give Rating Dropdown (0-5) */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-neutral-300">
+                    Give Rating
+                  </label>
+                  <div className="relative max-w-[120px]">
+                    <select
+                      className="w-full bg-[#111115] border border-neutral-800 rounded-lg p-2.5 text-sm text-neutral-200 focus:outline-none focus:border-indigo-500/50 transition-colors appearance-none cursor-pointer"
+                      defaultValue="5"
+                    >
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-neutral-500">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Write Review */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-neutral-300">
+                    Write Review
+                  </label>
+                  <textarea
+                    rows={4}
+                    placeholder="Share your experience staying at this place..."
+                    className="w-full bg-[#111115] border border-neutral-800 rounded-lg p-3 text-sm text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full md:w-auto px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-sm font-medium rounded-lg transition-colors duration-150 border border-neutral-700/50"
+                >
+                  Submit Review
+                </button>
+              </form>
             </div>
           </div>
 
@@ -122,21 +193,20 @@ export default async function PropertyDetailsPage({ params }) {
               <p className="text-xs text-neutral-400">Rent Price</p>
               <div className="flex items-baseline gap-1 mt-1">
                 <span className="text-3xl font-bold tracking-tight text-neutral-100">
-                  ৳{Number(property.rentPrice).toLocaleString()}
+                  ৳{Number(property?.rentPrice).toLocaleString()}
                 </span>
                 <span className="text-sm text-neutral-400">
-                  /{property.rentType.toLowerCase()}
+                  /{property?.rentType.toLowerCase()}
                 </span>
               </div>
             </div>
 
             {/* Interactive Booking Component */}
-            <BookingButton propertyId={property._id} />
-
-            <p className="text-center text-[11px] text-neutral-500">
-              You won't be charged yet. Secure your slot directly with the
-              owner.
-            </p>
+            <BookingButton
+              propertyId={property?._id}
+              property={property}
+              user={user}
+            />
           </div>
         </div>
       </div>

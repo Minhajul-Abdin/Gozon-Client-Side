@@ -1,5 +1,8 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 import { useState } from "react";
 import {
   Card,
@@ -17,6 +20,10 @@ export default function SigninPage() {
   // Form fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const router = useRouter();
+  const searchparams = useSearchParams();
+  const redirectTo = searchparams.get("redirect") || "/";
 
   // UI States
   const [isVisible, setIsVisible] = useState(false);
@@ -37,13 +44,13 @@ export default function SigninPage() {
       const { data, error: authError } = await signIn.email({
         email,
         password,
-        callbackURL: "/",
       });
 
       if (authError) {
         setError(authError.message || "Invalid email or password.");
       } else {
         setSuccess("Welcome back! Signing you in...");
+        router.push(redirectTo);
       }
     } catch (err) {
       setError(err.message || "An unexpected network error occurred.");
@@ -156,7 +163,7 @@ export default function SigninPage() {
             <div className="text-center mt-6 pt-5 border-t border-zinc-800/60 w-full text-xs text-zinc-500 font-medium">
               Don't have an account?{" "}
               <Link
-                href="/auth/registration"
+                href={`/auth/registration?redirect=${redirectTo}`}
                 className="text-indigo-400 font-semibold hover:text-indigo-300 transition-colors ml-0.5 text-xs"
               >
                 Create an account
