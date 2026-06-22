@@ -91,7 +91,7 @@ export default function PostPropertyPage() {
       newErrors.description = "Property description is required";
     if (!data.amenities) newErrors.amenities = "Amenities are required";
 
-    console.log("Validation errors:", newErrors);
+    // console.log("Validation errors:", newErrors);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
