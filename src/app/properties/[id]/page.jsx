@@ -3,14 +3,17 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { getPropertyById } from "@/lib/api/property";
 import { getUserSession } from "@/lib/core/session";
+import { getRewiews } from "@/lib/api/property";
 import BookingButton from "@/components/property/bookingBtn";
 import ReviewForm from "@/components/reviewForm";
+import ReviewCardList from "@/components/ReviewCard";
 
 export default async function PropertyDetailsPage({ params }) {
   const { id } = await params;
   const property = await getPropertyById(id);
+  const review = await getPropertyById(id);
 
-  const user = await getUserSession();
+  const user = await getRewiews();
 
   if (!property) {
     return (
@@ -141,6 +144,11 @@ export default async function PropertyDetailsPage({ params }) {
               </h3>
 
               <ReviewForm propertyId={property?._id} />
+            </div>
+
+            {/*Review showcase section */}
+            <div>
+              <ReviewCardList review={review} />
             </div>
           </div>
 
