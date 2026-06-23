@@ -12,6 +12,10 @@ export const getProperty = async () => {
   return serverFetch(`/api/properties`);
 };
 
+export const getAllProperty = async () => {
+  return serverFetch(`/api/allProperties`);
+};
+
 export const getPropertyById = async (propertyId) => {
   return serverFetch(`/api/properties/${propertyId}`);
 };
