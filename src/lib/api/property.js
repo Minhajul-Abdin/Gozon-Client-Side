@@ -1,7 +1,7 @@
 import { serverFetch } from "@/lib/core/server";
 
 export const getRewiews = async (propertyId) => {
-  return serverFetch(`/api/review?propertyId=${propertyId}`);
+  return serverFetch(`/api/review/${propertyId}`);
 };
 
 export const getFeaturedProperty = async () => {

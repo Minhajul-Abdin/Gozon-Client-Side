@@ -1,8 +1,9 @@
 import React from "react";
 
-const ReviewCardList = ({ reviews = [] }) => {
+const ReviewCardList = ({ review }) => {
+  console.log(review);
   // Empty State: If there are no reviews, show this section instead
-  if (!reviews || reviews.length === 0) {
+  if (!review || review.length === 0) {
     return (
       <div className="p-8 border border-neutral-800 border-dashed rounded-xl bg-[#111115]/10 text-center space-y-2">
         <p className="text-sm font-medium text-neutral-400">No reviews yet</p>
@@ -16,7 +17,7 @@ const ReviewCardList = ({ reviews = [] }) => {
   // Multiple Reviews State: Map through the array and render each review
   return (
     <div className="space-y-4">
-      {reviews.map((reviewData) => {
+      {review.map((reviewData) => {
         const {
           _id,
           reviewerName,

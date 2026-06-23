@@ -10,10 +10,10 @@ import ReviewCardList from "@/components/ReviewCard";
 
 export default async function PropertyDetailsPage({ params }) {
   const { id } = await params;
+  const review = await getRewiews(id);
   const property = await getPropertyById(id);
-  const review = await getPropertyById(id);
 
-  const user = await getRewiews();
+  const user = await getUserSession();
 
   if (!property) {
     return (
