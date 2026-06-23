@@ -19,6 +19,18 @@ export default function Navbar() {
     { label: "All Properties", href: "/properties" },
   ];
 
+  const dashboardLinks = {
+    tenant: "/dashboard/tenant",
+    owner: "/dashboard/owner",
+  };
+
+  if (user?.email) {
+    menuItems.push({
+      label: "Dashboard",
+      href: dashboardLinks[user?.role || "tenant"],
+    });
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full bg-[#c7ccd2] backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
@@ -92,12 +104,6 @@ export default function Navbar() {
 
         {user ? (
           <div className="hidden sm:flex items-center space-x-3">
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium text-gray-700 hover:text-black transition-colors px-3 py-1.5 rounded-md hover:bg-gray-100/60"
-            >
-              Dashboard
-            </Link>
             <Button
               className="inline-flex items-center justify-center text-sm font-medium text-red-700 hover:text-black hover:bg-gray-100/60 transition-colors px-4 py-2 rounded-md"
               variant="ghost"
@@ -142,12 +148,6 @@ export default function Navbar() {
 
           {user ? (
             <div className="hidden sm:flex items-center space-x-3">
-              <Link
-                href="/dashboard"
-                className="text-sm font-medium text-gray-700 hover:text-black transition-colors px-3 py-1.5 rounded-md hover:bg-gray-100/60"
-              >
-                Dashboard
-              </Link>
               <Button
                 className="inline-flex items-center justify-center text-sm font-medium text-red-700 hover:text-black hover:bg-gray-100/60 transition-colors px-4 py-2 rounded-md"
                 variant="ghost"

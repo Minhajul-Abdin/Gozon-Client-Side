@@ -5,12 +5,16 @@ import {
   ChartAreaStacked,
   SquarePlus,
   PersonFill,
+  BookmarkFill,
+  HeartFill,
 } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
+import { getUserSession } from "@/lib/core/session";
 import Link from "next/link";
 
-export function DashboardSideBar() {
-  const navItems = [
+export async function DashboardSideBar() {
+  const user = await getUserSession();
+  const ownerNavLinks = [
     { icon: ChartAreaStacked, href: "/dashboard/owner", label: "Analytics" },
     {
       icon: SquarePlus,
@@ -29,6 +33,23 @@ export function DashboardSideBar() {
     },
     { icon: PersonFill, href: "/dashboard/owner", label: "Profile" },
   ];
+
+  const tenantNavLinks = [
+    { icon: BookmarkFill, href: "/dashboard/tenant", label: "My Bookings" },
+    {
+      icon: HeartFill,
+      href: "/dashboard/tenant/myFavs",
+      label: "Favorites",
+    },
+    { icon: PersonFill, href: "/dashboard/tenant/profile", label: "Profile" },
+  ];
+
+  const navLinkMap = {
+    tenant: tenantNavLinks,
+    owner: ownerNavLinks,
+  };
+
+  const navItems = navLinkMap[user?.role];
 
   const navContent = (
     <nav className="flex flex-col gap-1">
