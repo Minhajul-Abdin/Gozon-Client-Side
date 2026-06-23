@@ -7,6 +7,9 @@ import {
   PersonFill,
   BookmarkFill,
   HeartFill,
+  Persons,
+  Books,
+  Cubes3Overlap,
 } from "@gravity-ui/icons";
 import { Button, Drawer } from "@heroui/react";
 import { getUserSession } from "@/lib/core/session";
@@ -44,9 +47,30 @@ export async function DashboardSideBar() {
     { icon: PersonFill, href: "/dashboard/tenant/profile", label: "Profile" },
   ];
 
+  const adminNavLinks = [
+    { icon: Persons, href: "/dashboard/admin", label: "All Users" },
+    {
+      icon: Cubes3Overlap,
+      href: "/dashboard/admin/allProperties",
+      label: "All Properties",
+    },
+    {
+      icon: BookmarkFill,
+      href: "/dashboard/admin/allBooking",
+      label: "All Bookings",
+    },
+    {
+      icon: Books,
+      href: "/dashboard/admin/transactions",
+      label: "Transactions",
+    },
+    { icon: PersonFill, href: "/dashboard/admin/profile", label: "Profile" },
+  ];
+
   const navLinkMap = {
     tenant: tenantNavLinks,
     owner: ownerNavLinks,
+    admin: adminNavLinks,
   };
 
   const navItems = navLinkMap[user?.role];

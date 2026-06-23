@@ -19,3 +19,7 @@ export const getPropertyById = async (propertyId) => {
 export const getMyproperties = async (ownerId, status = "pending") => {
   return serverFetch(`/api/properties?ownerId=${ownerId}`);
 };
+
+export const getMyBookings = async (userId, status = "pending") => {
+  return serverFetch(`/api/bookings?bookerId=${userId}`);
+};

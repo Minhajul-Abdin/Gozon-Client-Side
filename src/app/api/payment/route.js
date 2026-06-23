@@ -39,6 +39,7 @@ export async function POST(req) {
         title,
         propertyId,
         name,
+        status: "pending",
       },
       mode: "payment",
       success_url: `${origin}/properties/success?session_id={CHECKOUT_SESSION_ID}`,

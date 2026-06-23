@@ -22,6 +22,7 @@ export default function Navbar() {
   const dashboardLinks = {
     tenant: "/dashboard/tenant",
     owner: "/dashboard/owner",
+    admin: "/dashboard/admin",
   };
 
   if (user?.email) {
@@ -147,7 +148,7 @@ export default function Navbar() {
           {/* Mobile Auth CTAs */}
 
           {user ? (
-            <div className="hidden sm:flex items-center space-x-3">
+            <div className=" sm:flex items-center space-x-3">
               <Button
                 className="inline-flex items-center justify-center text-sm font-medium text-red-700 hover:text-black hover:bg-gray-100/60 transition-colors px-4 py-2 rounded-md"
                 variant="ghost"
