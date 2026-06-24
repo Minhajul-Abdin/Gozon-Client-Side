@@ -4,6 +4,7 @@ import FeaturedProperties from "../components/Featured.jsx";
 import WhyChooseUs from "../components/why.jsx";
 import FeaturedLocations from "../components/topLocations.jsx";
 import MarketStats from "@/components/marketStats.jsx";
+import ReviewSection from "@/components/topComment.jsx";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Banner />
       <FeaturedProperties />
       <FeaturedLocations />
+      <ReviewSection />
       <MarketStats />
       <WhyChooseUs />
     </div>

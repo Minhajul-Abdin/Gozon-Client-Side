@@ -34,7 +34,7 @@ export async function DashboardSideBar() {
       href: "/dashboard/owner/bookingRequest",
       label: "Booking Requests",
     },
-    { icon: PersonFill, href: "/dashboard/owner", label: "Profile" },
+    { icon: PersonFill, href: "/dashboard/owner/profile", label: "Profile" },
   ];
 
   const tenantNavLinks = [

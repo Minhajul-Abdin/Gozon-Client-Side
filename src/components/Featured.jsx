@@ -2,6 +2,7 @@ import React from "react";
 import PropertyCard from "@/components/property/propertyCard";
 import { getFeaturedProperty } from "@/lib/api/property";
 import Link from "next/link";
+import AnimatedGridList from "./AnimatedGridList"; // Imported below
 
 export default async function FeaturedProperties() {
   const properties = await getFeaturedProperty();
@@ -46,25 +47,16 @@ export default async function FeaturedProperties() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7x.5 7.5M21 12H3"
+                  d="M13.5 4.5L21 12m0 0l-7 7.5M21 12H3" // Cleaned up syntax typo from original code (7x.5 -> 7)
                 />
               </svg>
             </Link>
           </div>
         </div>
 
-        {/* Properties Grid */}
+        {/* Properties Grid with Framer Motion Integration */}
         {properties && properties.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-            {properties.map((property) => (
-              <div
-                key={property._id}
-                className="w-full transform hover:-translate-y-2 transition-all duration-300 ease-out"
-              >
-                <PropertyCard property={property} />
-              </div>
-            ))}
-          </div>
+          <AnimatedGridList properties={properties} />
         ) : (
           <div className="text-center py-12 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/20">
             <p className="text-zinc-500">

@@ -1,62 +1,30 @@
 "use client";
-import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
+import { Button, Modal, Surface } from "@heroui/react";
 import React, { useRef } from "react";
-import { submitBookings } from "@/lib/actions/booking";
+import { submitFav } from "@/lib/actions/fav";
 
 export default function BookingButton({ propertyId, property, user }) {
   const today = new Date().toISOString().split("T")[0];
   // Create a reference to the container to easily extract input fields without an outer form tag
   const containerRef = useRef(null);
 
-  /*const handleBookingAndCheckout = async (e) => {
-    // 1. Gather data manually using the container ref instead of e.currentTarget
-    if (!containerRef.current) return;
-
-    // We look up the inputs inside our container wrapper
-    const nameInput = containerRef.current.querySelector('[name="name"]');
-    const dateInput = containerRef.current.querySelector('[name="moveInDate"]');
-    const contactInput = containerRef.current.querySelector(
-      '[name="contactNumber"]',
-    );
-    const notesInput = containerRef.current.querySelector(
-      '[name="additionalNotes"]',
-    );
-
-    // Basic browser validation check since we aren't using native form validation
-    if (!nameInput?.value || !dateInput?.value || !contactInput?.value) {
-      alert("Please fill out all required fields.");
-      e.preventDefault(); // Stop the Stripe form submission
-      return;
-    }
-
+  const handlefav = async () => {
     const formDataObject = {
       propertyId: propertyId,
-      ownerId: property?.ownerId,
       propertyTitle: property?.propertyTitle,
-      bookerEmail: user?.email,
       bookerId: user?.id,
-      name: user?.name,
-      fromBookerName: nameInput.value,
-      moveInDate: dateInput.value,
-      contactNumber: contactInput.value,
-      additionalNotes: notesInput?.value || "",
     };
 
-    // 2. Submit data to your Server Action
+    console.log(formDataObject, "this is fav info");
+
     try {
-      const res = await submitBookings(formDataObject);
+      const res = await submitFav(formDataObject);
       if (res?.insertedId) {
         console.log("Booking data saved successfully.");
       }
     } catch (error) {
       console.error("Failed to save booking:", error);
     }
-
-    // 3. Let the outer form action `/api/checkout_sessions` naturally proceed after this completes
-  };*/
-
-  const handlefav = () => {
-    alert(`Initiating booking for property ID: ${propertyId}`);
   };
 
   return (
@@ -193,7 +161,7 @@ export default function BookingButton({ propertyId, property, user }) {
         </Modal>
       </div>
 
-      <button
+      <Button
         onClick={handlefav}
         className="w-full flex items-center justify-center gap-2 bg-rose-950/30 hover:bg-rose-900/40 text-rose-400 hover:text-rose-300 font-semibold py-3 px-4 rounded-xl border border-rose-900/30 hover:border-rose-800/50 transition-all duration-200 text-sm shadow-lg shadow-rose-950/10 focus:outline-none"
       >
@@ -206,7 +174,7 @@ export default function BookingButton({ propertyId, property, user }) {
           <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
         </svg>
         Add To Favorite
-      </button>
+      </Button>
     </div>
   );
 }
