@@ -9,6 +9,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, isPending } = useSession();
   const user = session?.user;
+  const userRole = user?.role?.toLowerCase() || "tenant";
 
   const handleSignOut = async () => {
     await signOut();
@@ -28,26 +29,28 @@ export default function Navbar() {
   if (user?.email) {
     menuItems.push({
       label: "Dashboard",
-      href: dashboardLinks[user?.role || "tenant"],
+      href: dashboardLinks[userRole],
     });
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#c7ccd2] backdrop-blur-md border-b border-gray-100">
+    <header className="sticky top-0 z-50 w-full bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-900 shadow-[0_4px_30px_rgba(0,0,0,0.4)] font-sans">
+      {/* Premium System-Wide Hairline Accent Strip */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500/50 via-violet-500/50 to-amber-500/50" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
-        {/* Mobile Menu Button - Left Aligned */}
+        {/* Mobile Menu Action Trigger */}
         <div className="flex sm:hidden">
           <button
             type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="inline-flex items-center justify-center p-2 rounded-md text-gray-800 hover:bg-gray-100/60 focus:outline-none"
+            className="inline-flex items-center justify-center p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900/60 border border-transparent hover:border-zinc-800 transition-all focus:outline-none"
             aria-expanded={isMenuOpen}
-            aria-label="Toggle navigation menu"
+            aria-label="Toggle navigation matrix"
           >
             {isMenuOpen ? (
-              // Close X Icon
               <svg
-                className="h-6 w-6"
+                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -60,9 +63,8 @@ export default function Navbar() {
                 />
               </svg>
             ) : (
-              // Hamburger Menu Icon
               <svg
-                className="h-6 w-6"
+                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -78,98 +80,134 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Brand / Logo - Left aligned on desktop, centered absolutely on mobile */}
+        {/* Tactical Brand Node Alignment */}
         <div className="max-sm:absolute max-sm:left-1/2 max-sm:-translate-x-1/2 flex-shrink-0">
           <Link
             href="/"
-            className="font-black text-xl tracking-[0.2em] text-black uppercase select-none"
+            className="font-mono font-black text-xl tracking-[0.25em] text-zinc-100 hover:text-white uppercase select-none transition-colors drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
           >
             GOZON
           </Link>
         </div>
 
-        {/* Desktop Middle Navigation - HTML5 nav element */}
-        <nav className="hidden sm:flex items-center space-x-4 absolute left-1/2 -translate-x-1/2">
+        {/* Center Anchored Matrix Routes */}
+        <nav className="hidden sm:flex items-center space-x-1 absolute left-1/2 -translate-x-1/2">
           {menuItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className="text-sm font-medium text-gray-700 hover:text-black transition-colors px-3 py-1.5 rounded-md hover:bg-gray-100/60"
+              className="text-xs font-mono font-medium text-zinc-400 hover:text-zinc-100 transition-all px-3 py-1.5 rounded-lg border border-transparent hover:border-zinc-900/60 hover:bg-zinc-900/20"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        {/* Desktop Right Actions */}
+        {/* Right Dashboard Profile Control Actions */}
+        <div className="hidden sm:flex items-center space-x-3">
+          {user ? (
+            <div className="flex items-center gap-3.5">
+              {/* Rich Identity Block Component */}
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800 shadow-[inset_0_0_12px_rgba(255,255,255,0.03)] font-mono text-xs text-zinc-300 select-none">
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    userRole === "admin"
+                      ? "bg-violet-500 shadow-[0_0_8px_#8b5cf6]"
+                      : userRole === "owner"
+                        ? "bg-amber-500 shadow-[0_0_8px_#f59e0b]"
+                        : "bg-emerald-500 shadow-[0_0_8px_#10b85f]"
+                  }`}
+                />
+                <span>{user.name || "Identity Stack"}</span>
+              </div>
 
-        {user ? (
-          <div className="hidden sm:flex items-center space-x-3">
-            <Button
-              className="inline-flex items-center justify-center text-sm font-medium text-red-700 hover:text-black hover:bg-gray-100/60 transition-colors px-4 py-2 rounded-md"
-              variant="ghost"
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </Button>
-          </div>
-        ) : (
-          <div className="hidden sm:flex items-center space-x-3">
-            <Link
-              href="/auth/signin"
-              className="inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-100/60 transition-colors px-4 py-2 rounded-md"
-            >
-              Login
-            </Link>
-            <Link
-              href="/auth/registration"
-              className="inline-flex items-center justify-center bg-black text-white text-sm font-medium hover:bg-gray-800 transition-colors px-4 py-2 rounded-md"
-            >
-              Register
-            </Link>
-          </div>
-        )}
+              <Button
+                className="text-xs font-mono font-medium text-red-400/90 hover:text-red-400 bg-red-950/10 hover:bg-red-950/20 border border-red-900/30 rounded-xl px-4 h-9 transition-all"
+                variant="flat"
+                onClick={handleSignOut}
+              >
+                Log Out
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/auth/signin"
+                className="inline-flex items-center justify-center text-xs font-mono font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/40 border border-transparent hover:border-zinc-800 transition-all px-4 h-9 rounded-lg"
+              >
+                Login
+              </Link>
+              <Link
+                href="/auth/registration"
+                className="inline-flex items-center justify-center bg-zinc-100 text-zinc-950 text-xs font-mono font-bold hover:bg-white transition-all px-4 h-9 rounded-lg shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              >
+                Register
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Mobile Dropdown Panel - Fullwidth Canvas overlaying content */}
+      {/* Rich Mobile Panel Slide Overlay */}
       {isMenuOpen && (
-        <nav className="sm:hidden absolute top-16 left-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg px-6 py-4 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4 duration-200">
+        <nav className="sm:hidden absolute top-16 left-0 w-full bg-zinc-950/95 backdrop-blur-xl border-b border-zinc-900 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] px-6 py-5 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="text-[10px] font-mono tracking-widest text-zinc-600 uppercase mb-1">
+            Navigation Matrix
+          </div>
+
           {menuItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
               onClick={() => setIsMenuOpen(false)}
-              className="w-full text-gray-800 font-medium py-2 text-lg border-b border-gray-100 block"
+              className="w-full text-zinc-300 font-medium py-2.5 text-base border-b border-zinc-900/60 hover:text-white flex items-center justify-between group transition-colors"
             >
-              {item.label}
+              <span>{item.label}</span>
+              <span className="text-zinc-700 font-mono text-xs group-hover:text-zinc-400 transition-colors">
+                →
+              </span>
             </Link>
           ))}
 
-          {/* Mobile Auth CTAs */}
-
+          {/* Mobile Profile Systems Blocks */}
           {user ? (
-            <div className=" sm:flex items-center space-x-3">
+            <div className="pt-4 flex flex-col gap-3">
+              <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-zinc-900/40 border border-zinc-900 font-mono text-xs text-zinc-400 shadow-[inset_0_0_10px_rgba(255,255,255,0.01)]">
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    userRole === "admin"
+                      ? "bg-violet-500"
+                      : userRole === "owner"
+                        ? "bg-amber-500"
+                        : "bg-emerald-500"
+                  }`}
+                />
+                Security Access: {userRole.toUpperCase()}
+              </div>
               <Button
-                className="inline-flex items-center justify-center text-sm font-medium text-red-700 hover:text-black hover:bg-gray-100/60 transition-colors px-4 py-2 rounded-md"
-                variant="ghost"
-                onClick={handleSignOut}
+                className="w-full justify-center text-sm font-mono font-medium text-red-400 bg-red-950/20 hover:bg-red-950/30 border border-red-900/40 rounded-xl py-6 tracking-wide"
+                variant="flat"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  handleSignOut();
+                }}
               >
-                Sign Out
+                Log Out
               </Button>
             </div>
           ) : (
-            <div className="pt-4 flex flex-col gap-3">
+            <div className="pt-4 flex flex-col gap-3 font-mono text-xs">
               <Link
                 href="/auth/signin"
                 onClick={() => setIsMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center border border-gray-300 text-gray-800 font-medium py-2.5 rounded-md text-center"
+                className="w-full inline-flex items-center justify-center border border-zinc-800 bg-zinc-900/20 text-zinc-300 font-medium py-3 rounded-xl text-center hover:bg-zinc-900 hover:text-white transition-colors"
               >
                 Login
               </Link>
               <Link
                 href="/auth/registration"
                 onClick={() => setIsMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center bg-black text-white font-medium py-2.5 rounded-md text-center"
+                className="w-full inline-flex items-center justify-center bg-zinc-100 text-zinc-950 font-bold py-3 rounded-xl text-center hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,255,255,0.05)]"
               >
                 Register
               </Link>

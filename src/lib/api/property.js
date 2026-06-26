@@ -1,4 +1,4 @@
-import { serverFetch } from "@/lib/core/server";
+import { serverFetch, protectedFetch } from "@/lib/core/server";
 
 export const getRewiews = async (propertyId) => {
   return serverFetch(`/api/review/${propertyId}`);
@@ -21,7 +21,7 @@ export const getPropertyById = async (propertyId) => {
 };
 
 export const getMyproperties = async (ownerId, status = "pending") => {
-  return serverFetch(`/api/properties?ownerId=${ownerId}`);
+  return protectedFetch(`/api/properties?ownerId=${ownerId}`);
 };
 
 export const getMyBookings = async (userId, status = "pending") => {

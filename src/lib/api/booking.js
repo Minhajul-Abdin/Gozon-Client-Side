@@ -1,5 +1,5 @@
-import { serverFetch } from "@/lib/core/server";
+import { serverFetch, protectedFetch } from "@/lib/core/server";
 
 export const getBookingsByBooker = async (bookingId) => {
-  return serverFetch(`/api/bookings?bookerId=${bookingId}`);
+  return protectedFetch(`/api/bookings?bookerId=${bookingId}`);
 };
