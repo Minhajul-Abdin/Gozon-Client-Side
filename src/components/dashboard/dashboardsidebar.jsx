@@ -61,7 +61,7 @@ export async function DashboardSideBar() {
     },
     {
       icon: HeartFill,
-      href: "/dashboard/tenant/myFavs",
+      href: "/dashboard/tenant/favorite",
       label: "Favorites",
       glow: "hover:text-red-400 hover:border-red-500/20",
     },

@@ -27,3 +27,7 @@ export const getMyproperties = async (ownerId, status = "pending") => {
 export const getMyBookings = async (userId, status = "pending") => {
   return serverFetch(`/api/bookings?bookerId=${userId}`);
 };
+
+export const getMyFavs = async (userId, status = "pending") => {
+  return serverFetch(`/api/favourite?bookerId=${userId}`);
+};
