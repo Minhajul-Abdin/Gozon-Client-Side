@@ -7,7 +7,7 @@ export const updateUserRole = async (userId, role) => {
   const data = await auth.api.setRole({
     body: {
       userId: userId,
-      role: role,
+      userRole: role,
     },
     headers: await headers(),
   });
