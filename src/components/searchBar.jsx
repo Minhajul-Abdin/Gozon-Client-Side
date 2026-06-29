@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Magnifier, MapPin, House, ChevronDown } from "@gravity-ui/icons";
 const SearchBar = () => {
@@ -14,10 +14,6 @@ const SearchBar = () => {
     { label: "Villa", value: "villa" },
     { label: "Studio", value: "studio" },
   ];
-
-  useEffect(() => {
-    const sp = URLSearchParams();
-  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
