@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Table, Chip, Button, Tooltip } from "@heroui/react";
 import {
   Person,
   Briefcase,
@@ -35,7 +36,7 @@ export default function AdminUsersTable({ users = [] }) {
     setPendingChange({ userId, userName, newRole });
     setIsConfirmOpen(true);
   };
-
+  console.log(pendingChange);
   // Execute server action if confirmed
   const confirmRoleChange = async () => {
     if (!pendingChange) return;
@@ -43,7 +44,8 @@ export default function AdminUsersTable({ users = [] }) {
     setIsUpdating(true);
     try {
       const { userId, newRole } = pendingChange;
-      await updateUserRole(userId, newRole);
+      const update = await updateUserRole(pendingChange);
+      console.log(update);
     } catch (error) {
       console.error("Failed to update user role:", error);
     } finally {
@@ -68,162 +70,137 @@ export default function AdminUsersTable({ users = [] }) {
 
       <div className="relative w-full max-w-full bg-zinc-950/90 border border-zinc-900 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-xl font-sans flex flex-col">
         {/* Scroll Containment Layer wrapper */}
-        <div className="w-full overflow-x-auto custom-scrollbar">
-          <table className="w-full min-w-[800px] sm:min-w-full border-collapse text-left text-sm text-zinc-400 table-auto">
-            {/* Table Header */}
-            <thead>
-              <tr className="border-b border-zinc-900 bg-zinc-900/20 text-zinc-500 font-mono text-xs uppercase tracking-wider select-none">
-                <th className="py-5 px-6 font-semibold">Profile</th>
-                <th className="py-5 px-6 font-semibold">Email Anchor</th>
-                <th className="py-5 px-6 font-semibold">Security Clearance</th>
-                <th className="py-5 px-6 font-semibold">Operational Status</th>
-                <th className="py-5 px-6 font-semibold text-right">
+        <Table
+          aria-label="User Management Table"
+          className="rounded-xl overflow-hidden"
+        >
+          <Table.ResizableContainer>
+            <Table.Content className="min-w-[1100px]">
+              <Table.Header>
+                <Table.Column
+                  isRowHeader
+                  id="profile"
+                  defaultWidth="2fr"
+                  minWidth={220}
+                >
+                  Profile
+                  <Table.ColumnResizer />
+                </Table.Column>
+
+                <Table.Column id="email" defaultWidth="2fr" minWidth={220}>
+                  Email Anchor
+                  <Table.ColumnResizer />
+                </Table.Column>
+
+                <Table.Column id="role" defaultWidth="1.2fr" minWidth={170}>
+                  Security Clearance
+                  <Table.ColumnResizer />
+                </Table.Column>
+
+                <Table.Column id="actions" defaultWidth="1fr" minWidth={320}>
                   System Override
-                </th>
-              </tr>
-            </thead>
+                </Table.Column>
+              </Table.Header>
 
-            {/* Table Body */}
-            <tbody className="divide-y divide-zinc-900 bg-transparent">
-              {users.map((user) => {
-                const userId = getUserId(user);
-                const userRole = user.userRole?.toLowerCase() || "tenant";
-                const userStatus = user.status || "Active";
+              <Table.Body emptyContent="No users found.">
+                {users.map((user) => {
+                  const userId = getUserId(user);
+                  const userRole = user.userRole?.toLowerCase() || "tenant";
+                  //const userStatus = user.status || "Active";
 
-                return (
-                  <tr
-                    key={userId}
-                    className="hover:bg-zinc-900/30 transition-all duration-200 ease-in-out border-b border-zinc-900/40"
-                  >
-                    {/* User Name + Glowing Avatar Component */}
-                    <td className="py-4 px-6 font-medium text-zinc-200 whitespace-nowrap">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-xs text-emerald-400 font-mono font-bold tracking-wider shadow-[inset_0_0_12px_rgba(52,211,153,0.05)]">
-                          {user.name
-                            ? user.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")
-                                .toUpperCase()
-                            : "U"}
-                        </div>
-                        <span className="text-zinc-100 font-medium tracking-tight hover:text-white transition-colors">
-                          {user.name || "Unknown Identity"}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* Email Address */}
-                    <td className="py-4 px-6 text-zinc-400 font-mono text-xs whitespace-nowrap">
-                      {user.email}
-                    </td>
-
-                    {/* Dynamic Contextual Roles (Owner, Tenant, Admin) */}
-                    <td className="py-4 px-6 whitespace-nowrap">
-                      {userRole === "owner" ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-amber-500/5 text-amber-400 border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.05)]">
-                          <Briefcase width={12} height={12} />
-                          Owner
-                        </span>
-                      ) : userRole === "admin" ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-violet-500/10 text-violet-400 border border-violet-500/30 shadow-[0_0_15px_rgba(139,92,246,0.1)] uppercase font-mono tracking-wider">
-                          <Shield width={12} height={12} />
-                          Admin
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-zinc-900 text-zinc-400 border border-zinc-800">
-                          <Person width={12} height={12} />
-                          Tenant
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Neon Operational Status Ring */}
-                    <td className="py-4 px-6 whitespace-nowrap">
-                      {userStatus === "Active" ? (
-                        <span className="inline-flex items-center gap-2 px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-500/5 text-emerald-400 border border-emerald-500/10 shadow-[inset_0_0_10px_rgba(16,185,129,0.02)]">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,1)]" />
-                          Active
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-2 px-2.5 py-1 text-xs font-medium rounded-md bg-red-500/5 text-red-400 border border-red-500/10">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,1)]" />
-                          Suspended
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Styled Interactive Custom Override Controls */}
-                    <td className="py-4 px-6 text-right whitespace-nowrap text-xs font-medium">
-                      <div className="flex items-center justify-end gap-3 font-mono text-[11px]">
-                        {userRole !== "admin" && (
-                          <button
-                            onClick={() =>
-                              initiateRoleChange(userId, user.name, "admin")
-                            }
-                            className="px-2 py-1 text-zinc-500 hover:text-white rounded hover:bg-zinc-900 transition-all duration-150"
-                          >
-                            + Admin
-                          </button>
-                        )}
-                        {userRole !== "owner" && (
-                          <button
-                            onClick={() =>
-                              initiateRoleChange(userId, user.name, "owner")
-                            }
-                            className="px-2 py-1 text-zinc-500 hover:text-white rounded hover:bg-zinc-900 transition-all duration-150"
-                          >
-                            + Owner
-                          </button>
-                        )}
-                        {userRole !== "tenant" && (
-                          <button
-                            onClick={() =>
-                              initiateRoleChange(userId, user.name, "tenant")
-                            }
-                            className="px-2 py-1 text-zinc-500 hover:text-white rounded hover:bg-zinc-900 transition-all duration-150"
-                          >
-                            + Tenant
-                          </button>
-                        )}
-
-                        {/* Suspension Actions Block */}
-                        <div className="h-4 w-[1px] bg-zinc-800 mx-1" />
-                        {userStatus === "Active" ? (
-                          <button
-                            onClick={() =>
-                              handleStatusChange(userId, "Suspended")
-                            }
-                            className="text-red-400/80 hover:text-red-400 transition-colors"
-                          >
-                            Suspend
-                          </button>
-                        ) : (
-                          <div className="flex items-center gap-2.5">
-                            <button
-                              onClick={() =>
-                                handleStatusChange(userId, "Active")
-                              }
-                              className="text-emerald-400/80 hover:text-emerald-400 transition-colors"
-                            >
-                              Activate
-                            </button>
-                            <button
-                              onClick={() => handleDelete(userId)}
-                              className="text-zinc-600 hover:text-red-400 transition-colors"
-                            >
-                              Delete
-                            </button>
+                  return (
+                    <Table.Row key={userId}>
+                      {/* Profile */}
+                      <Table.Cell>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-xs font-bold text-emerald-400">
+                            {user.name
+                              ? user.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")
+                                  .toUpperCase()
+                              : "U"}
                           </div>
+
+                          <span className="font-medium">
+                            {user.name || "Unknown Identity"}
+                          </span>
+                        </div>
+                      </Table.Cell>
+
+                      {/* Email */}
+                      <Table.Cell>
+                        <span className="font-mono text-xs">{user.email}</span>
+                      </Table.Cell>
+
+                      {/* Role */}
+                      <Table.Cell>
+                        {userRole === "owner" ? (
+                          <Chip color="warning" variant="flat">
+                            <Briefcase size={14} className="mr-1" />
+                            Owner
+                          </Chip>
+                        ) : userRole === "admin" ? (
+                          <Chip color="secondary" variant="flat">
+                            <Shield size={14} className="mr-1" />
+                            Admin
+                          </Chip>
+                        ) : (
+                          <Chip variant="bordered">
+                            <Person size={14} className="mr-1" />
+                            Tenant
+                          </Chip>
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </Table.Cell>
+
+                      {/* Actions */}
+                      <Table.Cell>
+                        <div className="flex flex-wrap gap-2">
+                          {userRole !== "admin" && (
+                            <Button
+                              size="sm"
+                              variant="bordered"
+                              onClick={() =>
+                                initiateRoleChange(userId, user.name, "admin")
+                              }
+                            >
+                              + Admin
+                            </Button>
+                          )}
+
+                          {userRole !== "owner" && (
+                            <Button
+                              size="sm"
+                              variant="bordered"
+                              onClick={() =>
+                                initiateRoleChange(userId, user.name, "owner")
+                              }
+                            >
+                              + Owner
+                            </Button>
+                          )}
+
+                          {userRole !== "tenant" && (
+                            <Button
+                              size="sm"
+                              variant="bordered"
+                              onClick={() =>
+                                initiateRoleChange(userId, user.name, "tenant")
+                              }
+                            >
+                              + Tenant
+                            </Button>
+                          )}
+                        </div>
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+              </Table.Body>
+            </Table.Content>
+          </Table.ResizableContainer>
+        </Table>
 
         {/* Tactical Dark-Themed Pagination Row */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-900 bg-zinc-950/50 text-xs font-mono text-zinc-500 select-none w-full">

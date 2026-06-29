@@ -38,7 +38,21 @@ export const serverMutation = async (path, data, method = "POST") => {
     body: JSON.stringify(data),
   });
 
-  //return handlestatusCode(res);
+  return await res.json();
+};
+
+export const serverMutation2 = async (path, data, method = "PUT") => {
+  console.log(path, data, "this is path and data info");
+  const res = await fetch(`${baseUrl}${path}`, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+      ...(await authHeaders()),
+    },
+    body: JSON.stringify(data),
+  });
+
+  return await res.json();
 };
 
 const handlestatusCode = (res) => {
