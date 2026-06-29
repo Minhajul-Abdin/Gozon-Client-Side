@@ -1,6 +1,6 @@
 import PropertyCard from "@/components/property/propertyCard";
 import { getProperty } from "@/lib/api/property";
-
+import SearchBar from "@/components/searchBar";
 export default async function PropertyPage() {
   const properties = await getProperty();
 
@@ -18,6 +18,11 @@ export default async function PropertyPage() {
           <p className="text-neutral-400 mt-2 text-sm">
             Explore premium apartments and listings.
           </p>
+        </div>
+
+        {/* shearch bar */}
+        <div>
+          <SearchBar />
         </div>
 
         {/* 3-Column Grid Layout */}

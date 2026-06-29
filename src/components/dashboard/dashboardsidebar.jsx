@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export async function DashboardSideBar() {
   const user = await getUserSession();
-  const userRole = user?.role?.toLowerCase() || "tenant";
+  const userRole = user?.userRole?.toLowerCase() || "tenant";
 
   const ownerNavLinks = [
     {

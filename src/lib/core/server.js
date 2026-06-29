@@ -38,7 +38,7 @@ export const serverMutation = async (path, data, method = "POST") => {
     body: JSON.stringify(data),
   });
 
-  return handlestatusCode();
+  //return handlestatusCode(res);
 };
 
 const handlestatusCode = (res) => {

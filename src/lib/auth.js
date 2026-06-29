@@ -16,7 +16,7 @@ export const auth = betterAuth({
   }),
   user: {
     additionalFields: {
-      role: {
+      userRole: {
         default: "tenant",
       },
     },

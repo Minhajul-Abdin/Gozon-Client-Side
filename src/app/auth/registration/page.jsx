@@ -95,7 +95,7 @@ export default function SignupPage() {
         email,
         password,
         name,
-        role,
+        userRole: role,
         image: imageUrl,
       });
 

@@ -19,12 +19,12 @@ export const getUserToken = async () => {
   return session?.session?.token || null;
 };
 
-export const requireRole = async (role) => {
+export const requireRole = async (userRole) => {
   const user = await getUserSession();
   if (!user) {
     redirect("/auth/signin");
   }
-  if (user?.role !== role) {
+  if (user?.userRole !== userRole) {
     redirect("/unauthorized");
   }
 

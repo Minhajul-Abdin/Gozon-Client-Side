@@ -9,7 +9,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, isPending } = useSession();
   const user = session?.user;
-  const userRole = user?.role?.toLowerCase() || "tenant";
+  const userRole = user?.userRole?.toLowerCase() || "tenant";
 
   const handleSignOut = async () => {
     await signOut();
