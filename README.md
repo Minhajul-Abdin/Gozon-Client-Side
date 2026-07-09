@@ -17,21 +17,16 @@ GoZon is a full-stack e-commerce web application that provides a fast, responsiv
 # 🚀 Technologies Used
 
 ### Frontend
-- React.js
-- React Router
+- Next.js
 - Tailwind CSS
-- DaisyUI
-- Firebase Authentication
-- Axios
+- BetterAuth Authentication
 - React Icons
-- React Hot Toast
 - Framer Motion
 
 ### Backend
 - Node.js
 - Express.js
 - MongoDB
-- JWT (JSON Web Token)
 - CORS
 - Dotenv
 
@@ -42,17 +37,13 @@ GoZon is a full-stack e-commerce web application that provides a fast, responsiv
 ---
 
 # ✨ Key Features
-
-- 🔐 Secure user authentication with Firebase
-- 🛍️ Browse products by categories
-- 🔎 Search and filter products
+- 🔐 Secure user authentication with BetterAuth
 - ❤️ Wishlist management
 - 🛒 Shopping cart functionality
 - 📦 Order placement and management
 - 📱 Fully responsive design
 - ⚡ Fast and modern user interface
 - 🌙 Clean and intuitive user experience
-- 🔒 Protected routes using JWT authentication
 
 ---
 
@@ -146,10 +137,8 @@ src/
 
 - Modern and responsive UI optimized for every device.
 - Real-time authentication and protected user routes.
-- Dynamic product filtering and category browsing.
 - Smooth animations for an engaging shopping experience.
 - Scalable architecture with reusable React components.
-- Secure backend communication using JWT authentication.
 - Clean folder structure for easy maintenance and future development.
 - Fast loading experience powered by React and Vite.
 
